@@ -255,13 +255,11 @@ if (senderNumber.includes("923479188912") && !isReact) {
   
 // React only with emoji present in the message, controlled via AUTO_REACT env
 if (!isReact && config.AUTO_REACT === 'true') {
-    const body = m.body;
-    for (let i = 0; i < body.length; i++) {
-        const char = body[i];
-        if (char.match(/[\p{Emoji}]/u)) {
-            m.react(char);
-            break;
-        }
+    const emojiRegex = /[\p{Emoji}]/gu;
+    const emojisInMessage = m.body.match(emojiRegex);
+
+    if (emojisInMessage && emojisInMessage.length > 0) {
+        m.react(emojisInMessage[0]); // React with the first emoji found
     }
 }
         

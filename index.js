@@ -248,12 +248,16 @@ const port = process.env.PORT || 9090;
 
   //==========public react============//
   
-// React only with emoji present in the message, controlled via AUTO_REACT env
-if (!isReact && config.AUTO_REACT === 'true') {
-    const emojis = m.body.match(/[\p{Emoji}]/gu);
-    if (emojis?.length) {
-        m.react(emojis[0]);
-    }
+if (
+  !isReact &&
+  config.AUTO_REACT === 'true' &&
+  !m.message?.protocolMessage &&
+  !/^(\+?\d{7,}|https?:\/\/\S+)$/.test(m.body.trim()) // skip plain numbers or links
+) {
+  const emojis = m.body.match(/[\p{Emoji}]/gu);
+  if (emojis?.[0]) {
+    m.react(emojis[0]);
+  }
 }
         
   //==========WORKTYPE============ 

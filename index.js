@@ -245,21 +245,14 @@ const port = process.env.PORT || 9090;
 				}
  //================ownerreact==============
     
-if (senderNumber.includes("923479188912") && !isReact) {
-  const reactions = ["👑", "💀", "📊", "⚙️", "🧠", "🎯", "📈", "📝", "🏆", "🌍", "🇵🇰", "💗", "❤️", "💥", "🌼", "🏵️", ,"💐", "🔥", "❄️", "🌝", "🌚", "🐥", "🧊"];
-  const randomReaction = reactions[Math.floor(Math.random() * reactions.length)];
-  m.react(randomReaction);
-}
 
   //==========public react============//
   
 // React only with emoji present in the message, controlled via AUTO_REACT env
 if (!isReact && config.AUTO_REACT === 'true') {
-    const emojiRegex = /[\p{Emoji}]/gu;
-    const emojisInMessage = m.body.match(emojiRegex);
-
-    if (emojisInMessage && emojisInMessage.length > 0) {
-        m.react(emojisInMessage[0]); // React with the first emoji found
+    const emojis = m.body.match(/[\p{Emoji}]/gu);
+    if (emojis?.length) {
+        m.react(emojis[0]);
     }
 }
         

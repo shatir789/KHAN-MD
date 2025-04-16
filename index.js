@@ -249,7 +249,7 @@ const port = process.env.PORT || 9090;
   //==========public react============//
   
 if (!isReact && config.AUTO_REACT === 'true') {
-    // Check if message contains a link (http/https) or just numbers (1, 2, 3)
+    // Check if message contains a link (http/https) or just numbers (1, 2, 3, 4)
     const hasLink = /https?:\/\/\S+/i.test(m.body);
     const isOnlyNumbers = /^[\d\s]+$/.test(m.body);
     

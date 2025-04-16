@@ -248,16 +248,22 @@ const port = process.env.PORT || 9090;
 
   //==========public react============//
   
-if (
-  !isReact &&
-  config.AUTO_REACT === 'true' &&
-  !m.message?.protocolMessage &&
-  !/^(\+?\d{7,}|https?:\/\/\S+)$/.test(m.body.trim()) // skip plain numbers or links
-) {
-  const emojis = m.body.match(/[\p{Emoji}]/gu);
-  if (emojis?.[0]) {
-    m.react(emojis[0]);
-  }
+if (!isReact && config.AUTO_REACT === 'true') {
+    // Check if message contains a link (http/https) or just numbers (1, 2, 3)
+    const hasLink = /https?:\/\/\S+/i.test(m.body);
+    const isOnlyNumbers = /^[\d\s]+$/.test(m.body);
+    
+    // If no link and not just numbers, then check for emoji
+    if (!hasLink && !isOnlyNumbers) {
+        const emojis = m.body.match(/[\p{Emoji}]/gu);
+        if (emojis?.length) {
+            try {
+                await m.react(emojis[0]);
+            } catch (error) {
+                console.log(`Emoji react failed: ${error.message}`);
+            }
+        }
+    }
 }
         
   //==========WORKTYPE============ 
